@@ -1,9 +1,9 @@
 CFLAGS = -Werror -Wall -Wextra -std=c++98
 CC = c++
-SRC = 
+SRC = Account.cpp tests.cpp
 OBJ = $(SRC:.cpp=.o)
 
-NAME = 
+NAME = log
 
 all: $(NAME)
 
