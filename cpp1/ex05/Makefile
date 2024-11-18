@@ -1,9 +1,9 @@
 CFLAGS = -Werror -Wall -Wextra -std=c++98
 CC = c++
-SRC = main.cpp 
+SRC = main.cpp Harl.cpp
 OBJ = $(SRC:.cpp=.o)
 
-NAME = 
+NAME = Harl
 
 all: $(NAME)
 

@@ -4,17 +4,17 @@
 
 Contact::Contact(){}
 
-void Contact::setFirstName(std::string firstName){ this->firstName = firstName; }
-void Contact::setLastName(std::string lastName){ this->lastName = lastName; }
-void Contact::setLogin(std::string login){ this->login = login; }
-void Contact::setPhoneNumber(std::string phoneNumber){ this->phoneNumber = phoneNumber; }
-void Contact::setDarkestSecret(std::string darkestSecret){ this->darkestSecret = darkestSecret; }
+void Contact::setFirstName(std::string firstName)         { this->firstName = firstName; }
+void Contact::setLastName(std::string lastName)           { this->lastName = lastName; }
+void Contact::setLogin(std::string login)                 { this->login = login; }
+void Contact::setPhoneNumber(std::string phoneNumber)     { this->phoneNumber = phoneNumber; }
+void Contact::setDarkestSecret(std::string darkestSecret) { this->darkestSecret = darkestSecret; }
 
-std::string Contact::getFirstName(){ return this->firstName; }
-std::string Contact::getLastName(){ return this->lastName; }
-std::string Contact::getLogin(){ return this->login; }
-std::string Contact::getPhoneNumber(){ return this->phoneNumber; }
-std::string Contact::getDarkestSecret(){ return this->darkestSecret; }   
+std::string Contact::getFirstName()     { return this->firstName; }
+std::string Contact::getLastName()      { return this->lastName; }
+std::string Contact::getLogin()         { return this->login; }
+std::string Contact::getPhoneNumber()   { return this->phoneNumber; }
+std::string Contact::getDarkestSecret() { return this->darkestSecret; }   
 
 void Contact::displayContact()
 {
