@@ -1,9 +1,9 @@
 CFLAGS = -Werror -Wall -Wextra -std=c++98
 CC = c++
-SRC = main.cpp
+SRC = main.cpp Fixed.cpp Point.cpp bsp.cpp
 OBJ = $(SRC:.cpp=.o)
 
-NAME = 
+NAME = bsp
 
 all: $(NAME)
 

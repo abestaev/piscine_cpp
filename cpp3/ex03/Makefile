@@ -1,9 +1,9 @@
-CFLAGS = -Werror -Wall -Wextra -std=c++98
+CFLAGS = -Werror -Wall -Wextra -Wshadow -std=c++98
 CC = c++
-SRC = main.cpp
+SRC = main.cpp ClapTrap.cpp ScavTrap.cpp FragTrap.cpp DiamondTrap.cpp
 OBJ = $(SRC:.cpp=.o)
 
-NAME = 
+NAME = DiamondTrap
 
 all: $(NAME)
 
