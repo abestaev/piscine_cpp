@@ -1,49 +1,24 @@
 #include "Fixed.hpp"
+#include "Point.hpp"
+#include "bsp.hpp"
+#define GREEN "\033[32m"
+#define RED "\033[31m"
+#define RESET "\033[0m"
 
 int main( void ) {
-    Fixed a(5.5f);
-    Fixed b(2);
-    Fixed c;
+    Point A(0.0, 0.0), B(10.0, 10.0), C(0.0, 20.0);
+    Point P(9, 10);
 
-    std::cout << "Variables:\na: " << a << std::endl;
-    std::cout << "b: " << b << std::endl;
-    std::cout << "c: " << c << std::endl;
+    std::cout << "Point A: " << A.getX() << ", " << A.getY() << std::endl;
+    std::cout << "Point B: " << B.getX() << ", " << B.getY() << std::endl;
+    std::cout << "Point C: " << C.getX() << ", " << C.getY() << std::endl;
+    std::cout << "Point P: " << P.getX() << ", " << P.getY() << std::endl;
 
-    // Test des opérateurs de comparaison
-    std::cout << "\nComparaison:" << std::endl;
-    std::cout << "a > b: " << (a > b) << std::endl;
-    std::cout << "a < b: " << (a < b) << std::endl;
-    std::cout << "a >= b: " << (a >= b) << std::endl;
-    std::cout << "a <= b: " << (a <= b) << std::endl;
-    std::cout << "a == b: " << (a == b) << std::endl;
-    std::cout << "a != b: " << (a != b) << std::endl;
-
-    // Test des opérateurs arithmétiques
-    std::cout << "\nOpérations arithmétiques:" << std::endl;
-    std::cout << "a + b: " << (a + b) << std::endl;
-    std::cout << "a - b: " << (a - b) << std::endl;
-    std::cout << "a * b: " << (a * b) << std::endl;
-    std::cout << "a / b: " << (a / b) << std::endl;
-
-    // Test des incrémentations et décrémentations
-    std::cout << "\nIncrémentation et décrémentation:" << std::endl;
-    std::cout << "c (avant): " << c << std::endl;
-    std::cout << "++c: " << ++c << std::endl;
-    std::cout << "c++: " << c++ << std::endl;
-    std::cout << "c (après incrémentation): " << c << std::endl;
-
-    std::cout << "--c: " << --c << std::endl;
-    std::cout << "c--: " << c-- << std::endl;
-    std::cout << "c (après décrémentation): " << c << std::endl;
-
-    const Fixed d(3.3f);
-    const Fixed e(7.7f);
-
-    std::cout << "\nMin et Max:" << std::endl;
-    std::cout << "min(a, b): " << Fixed::min(a, b) << std::endl;
-    std::cout << "max(a, b): " << Fixed::max(a, b) << std::endl;
-    std::cout << "min(d, e): " << Fixed::min(d, e) << std::endl;
-    std::cout << "max(d, e): " << Fixed::max(d, e) << std::endl;
-
+    std::cout << "Area of ABC: " << Area(A, B, C) << std::endl;
+    std::cout << std::boolalpha;
+    if (bsp(A, B, C, P))
+        std::cout << "Is P inside ABC? " << GREEN << bsp(A, B, C, P) << RESET << std::endl;
+    else
+        std::cout << "Is P inside ABC? " << RED << bsp(A, B, C, P) << RESET << std::endl;
     return 0;
 }

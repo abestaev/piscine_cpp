@@ -18,4 +18,6 @@ class Point {
 
         Fixed getY() const;
         Fixed getX() const;
-}
+};
+
+#endif
