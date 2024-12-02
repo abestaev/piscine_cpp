@@ -1,9 +1,9 @@
 CFLAGS = -Werror -Wall -Wextra -std=c++98
 CC = c++
-SRC = main.cpp
+SRC = main.cpp Animal.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp
 OBJ = $(SRC:.cpp=.o)
 
-NAME = 
+NAME = Animal
 
 all: $(NAME)
 
