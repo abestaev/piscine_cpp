@@ -1,21 +1,31 @@
-CFLAGS = -Werror -Wall -Wextra -std=c++98
+CFLAGS = -Werror -Wall -Wextra -std=c++98 -g3 -MMD
 CC = c++
-SRC = main.cpp
-OBJ = $(SRC:.cpp=.o)
+SRC = main.cpp AAnimal.cpp Dog.cpp Cat.cpp WrongAnimal.cpp WrongCat.cpp Brain.cpp
+OBJ_DIR = build
+OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
+DEP = $(OBJ:.o=.d)
 
-NAME = 
+NAME = Animal
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	$(CC) $(CFLAGS) $(SRC) -o $(NAME)
+	$(CC) $(CFLAGS) $(OBJ) -o $(NAME)
 
-clean: 
-	rm -f $(OBJ)
+$(OBJ_DIR)/%.o: %.cpp | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
+
+clean:
+	rm -rf $(OBJ_DIR)
 
 fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
 
-.PHONY: all clean fclean re	
+-include $(DEP)
+
+.PHONY: all clean fclean re
