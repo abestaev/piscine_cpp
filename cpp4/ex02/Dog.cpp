@@ -8,7 +8,7 @@ Dog::Dog() {
     brain = new Brain();
 }
 
-Dog::Dog(Dog const &other) {
+Dog::Dog(Dog const &other) : AAnimal(other) {
     std::cout << PURPLE "Dog copy constructor" RESET << std::endl;
     brain = new Brain(*other.brain);
 }
