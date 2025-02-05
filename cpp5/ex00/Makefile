@@ -1,11 +1,11 @@
-CFLAGS = -Werror -Wall -Wextra -std=c++98 -g3 -MMD 
+CFLAGS = -Werror -Wall -Wextra -std=c++98 -g3 -MMD
 CC = c++
-SRC = main.cpp AMateria.cpp Character.cpp Cure.cpp Ice.cpp MateriaSource.cpp
+SRC = main.cpp Bureaucrat.cpp
 OBJ_DIR = build
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
 DEP = $(OBJ:.o=.d)
 
-NAME = a.out
+NAME = Bureaucrat
 
 all: $(NAME)
 
