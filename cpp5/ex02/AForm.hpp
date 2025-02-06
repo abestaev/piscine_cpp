@@ -12,9 +12,13 @@ class AForm {
         const int _gradeRequiredToSign;
         const int _gradeRequiredToExecute;
 
+    protected:
+        const std::string _target;
+        void checkGrade(int grade) const;
+
     public:
         AForm();
-        AForm(std::string const &name, int gradeRequiredToSign, int gradeRequiredToExecute);
+        AForm(std::string const &name, int gradeRequiredToSign, int gradeRequiredToExecute, std::string const &target);
         AForm(AForm const & src);
         AForm &operator=(AForm const & src);
         virtual ~AForm();

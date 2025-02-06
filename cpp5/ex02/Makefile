@@ -1,11 +1,12 @@
 CFLAGS = -Werror -Wall -Wextra -std=c++98 -g3 -MMD
 CC = c++
-SRC = main.cpp Bureaucrat.cpp Form.cpp
+SRC = main.cpp Bureaucrat.cpp AForm.cpp ShrubberyCreationForm.cpp \
+	  RobotomyRequestForm.cpp PresidentialPardonForm.cpp
 OBJ_DIR = build
 OBJ = $(addprefix $(OBJ_DIR)/, $(SRC:.cpp=.o))
 DEP = $(OBJ:.o=.d)
 
-NAME = Form
+NAME = Alonzy
 
 all: $(NAME)
 
