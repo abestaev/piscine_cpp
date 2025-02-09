@@ -20,18 +20,31 @@ AForm *Intern::makeForm(std::string const &formName, std::string const &target) 
         "presidential pardon"
     };
 
+    // option 1
+    AForm *(*formCreators[])(std::string const &) = {
+            &createShrubberyForm,
+            &createRobotomyForm,
+            &createPresidentialForm
+    };
+
     for (int i = 0; i < 3; i++) {
         if (formName == formTypes[i]) {
-            switch (i) {
-                case 0:
-                    return new ShrubberyCreationForm(target);
-                case 1:
-                    return new RobotomyRequestForm(target);
-                case 2:
-                    return new PresidentialPardonForm(target);
-            }
+            return formCreators[i](target);
         }
     }
+    // option 2
+    // for (int i = 0; i < 3; i++) {
+    //     if (formName == formTypes[i]) {
+    //         switch (i) {
+    //             case 0:
+    //                 return new ShrubberyCreationForm(target);
+    //             case 1:
+    //                 return new RobotomyRequestForm(target);
+    //             case 2:
+    //                 return new PresidentialPardonForm(target);
+    //         }
+    //     }
+    // }
 
     std::cout << "Form type not found" << std::endl;
     return NULL;
