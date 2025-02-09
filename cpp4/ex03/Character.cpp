@@ -1,14 +1,20 @@
 #include "Character.hpp"
 
-Character::Character() : _name("default"), _count(0) {
+Character::Character() : _name("default"), _count(0), _lostCount(0) {
     for (int i = 0; i < 4; i++) {
         _inventory[i] = NULL;
     }
+    for (int i = 0; i < 1000; i++) {
+        _lostMateria[i] = NULL;
+    }
 }
 
-Character::Character(std::string name) : _name(name), _count(0) {
+Character::Character(std::string name) : _name(name), _count(0), _lostCount(0) {
     for (int i = 0; i < 4; i++) {
         _inventory[i] = NULL;
+    }
+    for (int i = 0; i < 1000; i++) {
+        _lostMateria[i] = NULL;
     }
 }
 
@@ -52,6 +58,11 @@ Character::~Character() {
             delete _inventory[i];
         }
     }
+    for (int i = 0; i < 1000; i++) {
+        if (_lostMateria[i] != NULL) {
+            delete _lostMateria[i];
+        }
+    }
 }
 
 std::string const & Character::getName() const {
@@ -63,12 +74,19 @@ void Character::equip(AMateria* m) {
         _inventory[_count] = m;
         _count++;
     }
+    else {
+        delete m;
+    }
 }
 
 void Character::unequip(int idx) {
     if (idx >= 0 && idx < 4) {
+        _lostMateria[_lostCount++] = _inventory[idx];
         _inventory[idx] = NULL;
         _count--;
+    }
+    if (_lostCount >= 1000) {
+        std::cout << "Lost 1000 materia (leak possible)" << std::endl;
     }
 }
 

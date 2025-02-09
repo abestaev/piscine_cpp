@@ -10,7 +10,9 @@ class Character : public ICharacter
     private:
         std::string _name;
         AMateria *_inventory[4];
+        AMateria *_lostMateria[1000];
         int _count;
+        int _lostCount;
 
     public:
         Character();
