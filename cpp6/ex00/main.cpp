@@ -5,8 +5,6 @@ int main(int ac, char **av) {
         std::cerr << "Usage: ./convert [value]" << std::endl;
         return 1;
     }
-
-    ScalarConverter sc(av[1]);
-    sc.convert();
+    ScalarConverter::convert(av[1]);
     return 0;
 }
