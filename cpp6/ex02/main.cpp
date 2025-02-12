@@ -74,5 +74,6 @@ int main()
     std::cout << "identify via reference: ";
     identify(*base);
 
+    delete base;
     return 0;
 }
