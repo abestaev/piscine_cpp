@@ -1,6 +1,7 @@
 #include "Span.hpp"
 #include <stdexcept>
 #include <algorithm>
+#include <ctime>
 
 Span::Span() : max_size(0) {}
 
@@ -48,7 +49,17 @@ int Span::longestSpan() {
     return max - min;
 }
 
-void Span::addNumbers(int count, int number) {
-    for (int i = 0; i < count; i++)
+void Span::addNumbers(unsigned int count, int number) {
+    if (count + list.size() > max_size)
+        throw std::length_error("Span max size exceeded");
+    for (unsigned int i = 0; i < count; i++)
         addNumber(number);
+}
+
+void Span::addNumbers(unsigned int count, int min, int max) {
+    if (count + list.size() > max_size)
+        throw std::length_error("Span max size exceeded");
+    std::srand(std::time(0));
+    for (unsigned int i = 0; i < count; i++)
+        list.push_back(std::rand() % (max - min) + min);
 }

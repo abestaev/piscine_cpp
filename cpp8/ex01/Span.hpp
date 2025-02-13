@@ -18,7 +18,8 @@ class Span {
         void addNumber(int number);
         int shortestSpan();
         int longestSpan();
-        void addNumbers(int count, int number);
+        void addNumbers(unsigned int count, int number);
+        void addNumbers(unsigned int count, int min, int max);
 };
 
 #endif
