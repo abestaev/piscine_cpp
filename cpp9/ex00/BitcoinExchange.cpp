@@ -1,5 +1,20 @@
 #include "BitcoinExchange.hpp"
 
+BitcoinExchange::BitcoinExchange() {}
+
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &other) {
+    *this = other;
+}
+
+BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &other) {
+    if (this != &other) {
+        this->_exchangeRates = other._exchangeRates;
+    }
+    return *this;
+}
+
+BitcoinExchange::~BitcoinExchange() {}
+
 static int string_to_int(const std::string &s){
     int i;
     std::stringstream(s) >> i;

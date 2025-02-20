@@ -10,8 +10,13 @@
 class BitcoinExchange {
     private:
         std::map<std::string, double> _exchangeRates;
+        BitcoinExchange();
+        BitcoinExchange(const BitcoinExchange &other);
+        BitcoinExchange &operator=(const BitcoinExchange &other);
+        
     public:
         BitcoinExchange(const std::string &filename);
+        ~BitcoinExchange();
         double convert(const std::string &date, double amount) const;
         void processInputFile(const std::string &filename);
 };
