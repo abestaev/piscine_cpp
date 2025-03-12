@@ -26,17 +26,17 @@ int RPN::evaluate(const std::string &expr) {
             _stack.push(atoi(token.c_str()));
         } else {
             if (_stack.size() < 2)
-                throw std::invalid_argument("Not enough operands");
-
+                throw std::invalid_argument("Too many operands");
+            
             int b = _stack.top(); _stack.pop();
             int a = _stack.top(); _stack.pop();
-
+            
             if (token[0] == '+') _stack.push(a + b);
             else if (token[0] == '-') _stack.push(a - b);
             else if (token[0] == '*') _stack.push(a * b);
             else if (token[0] == '/') {
                 if (b == 0)
-                    throw std::invalid_argument("Division by zero");
+                throw std::invalid_argument("Division by zero");
                 _stack.push(a / b);
             } else {
                 throw std::invalid_argument("Invalid operator: " + token);
@@ -44,6 +44,6 @@ int RPN::evaluate(const std::string &expr) {
         }
     }
     if (_stack.size() != 1)
-        throw std::invalid_argument("Too many operands");
+        throw std::invalid_argument("Not enough operands");
     return _stack.top();
 }
