@@ -12,6 +12,8 @@
 class PmergeMe {
     private: 
         void printVector(const std::vector<int>& vec);
+        std::vector<int> recursiveSort(std::vector<int>& vec, int depth);
+        std::vector<int> merge(const std::vector<int>& left, const std::vector<int>& right);
 
     public:
         PmergeMe();
@@ -20,6 +22,7 @@ class PmergeMe {
         ~PmergeMe();
 
         std::vector<int> mergeInsertSort(const std::vector<int>& input);
+
 };
 
 #endif

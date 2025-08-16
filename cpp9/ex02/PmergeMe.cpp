@@ -21,9 +21,92 @@ void PmergeMe::printVector(const std::vector<int> &vec) {
     std::cout << std::endl;
 }
 
-std::vector<int> PmergeMe::mergeInsertSort(const std::vector<int>& input){
-    std::cout << "input vector received: " << std::endl;
-    printVector(input);
-    
-    return input;
+std::vector<int> PmergeMe::merge(const std::vector<int>& left, const std::vector<int>& right) {
+    std::vector<int> result;
+    size_t i = 0, j = 0;
+
+    while (i < left.size() && j < right.size()) {
+        if (left[i] < right[j])
+            result.push_back(left[i++]);
+        else
+            result.push_back(right[j++]);
+    }
+    while (i < left.size()) result.push_back(left[i++]);
+    while (j < right.size()) result.push_back(right[j++]);
+
+    return result;
+}
+
+std::vector<int> PmergeMe::recursiveSort(std::vector<int>& vec, int depth) {
+    if (vec.size() <= 1)
+        return vec;
+
+    size_t mid = vec.size() / 2;
+    std::vector<int> left(vec.begin(), vec.begin() + mid);
+    std::vector<int> right(vec.begin() + mid, vec.end());
+
+    std::cout << std::string(depth * 2, ' ')
+              << "Divise en : [ ";
+    for (size_t i = 0; i < left.size(); ++i) std::cout << left[i] << " ";
+    std::cout << "] et [ ";
+    for (size_t i = 0; i < right.size(); ++i) std::cout << right[i] << " ";
+    std::cout << "]" << std::endl;
+
+    left = recursiveSort(left, depth + 1);
+    right = recursiveSort(right, depth + 1);
+
+    std::vector<int> merged = merge(left, right);
+
+    std::cout << std::string(depth * 2, ' ')
+              << "Fusion donne : [ ";
+    for (size_t i = 0; i < merged.size(); ++i) std::cout << merged[i] << " ";
+    std::cout << "]" << std::endl;
+
+    return merged;
+}
+
+std::vector<int> PmergeMe::mergeInsertSort(const std::vector<int>& input) {
+    std::vector<int> mainChain;
+    std::vector<int> pend;
+
+    std::cout << "Formation des paires :" << std::endl;
+    for (size_t i = 0; i + 1 < input.size(); i += 2) {
+        int a = input[i];
+        int b = input[i + 1];
+        if (a > b) std::swap(a, b);
+
+        std::cout << "  Paire (" << a << ", " << b << ")" << std::endl;
+
+        pend.push_back(a);
+        mainChain.push_back(b);
+    }
+    if (input.size() % 2 != 0) {
+        std::cout << "  Dernier element non paire : " << input.back() << std::endl;
+        pend.push_back(input.back());
+    }
+
+    // Affichage des listes initiales
+    std::cout << "\nMainChain avant tri : [ ";
+    for (size_t i = 0; i < mainChain.size(); ++i) std::cout << mainChain[i] << " ";
+    std::cout << "]" << std::endl;
+
+    std::cout << "Pend (les petits) : [ ";
+    for (size_t i = 0; i < pend.size(); ++i) std::cout << pend[i] << " ";
+    std::cout << "]" << std::endl;
+
+    // Tri récursif de mainChain
+    std::cout << "\n--- Tri récursif de MainChain ---" << std::endl;
+    mainChain = recursiveSort(mainChain, 0);
+
+    // Résultat final intermédiaire
+    std::cout << "\n=== Résultat après tri des grands ===" << std::endl;
+    std::cout << "MainChain triee : [ ";
+    for (size_t i = 0; i < mainChain.size(); ++i) std::cout << mainChain[i] << " ";
+    std::cout << "]" << std::endl;
+
+    std::cout << "Pend : [ ";
+    for (size_t i = 0; i < pend.size(); ++i) std::cout << pend[i] << " ";
+    std::cout << "]" << std::endl;
+
+    return mainChain; // pour l'instant on ne fusionne pas avec pend
 }
