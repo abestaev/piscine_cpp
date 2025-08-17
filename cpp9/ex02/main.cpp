@@ -6,6 +6,8 @@
 #include <iomanip>
 #include <sys/time.h>
 #include "PmergeMe.hpp"
+#include <set>
+
 
 long long getCurrentTimeMicros() {
     struct timeval tv;
@@ -21,11 +23,21 @@ int main(int argc, char **argv) {
 
     // Vérification des arguments
     std::vector<int> numbers;
+    std::set<int> unique_checker;
+
     for (int i = 1; i < argc; ++i) {
-        int val;
+        long long val;
         std::stringstream ss(argv[i]);
-        if (!(ss >> val) || !ss.eof() || val < 0 || val > INT_MAX) {
+        if (!(ss >> val) || !ss.eof() || val < 0) {
             std::cerr << "Error: Invalid number '" << argv[i] << "'" << std::endl;
+            return 1;
+        }
+        if (val > INT_MAX) {
+             std::cerr << "Error: Number '" << argv[i] << "' is too large." << std::endl;
+             return 1;
+        }
+        if (!unique_checker.insert(static_cast<int>(val)).second) {
+            std::cerr << "Error: Duplicate number '" << val << "' found." << std::endl;
             return 1;
         }
         numbers.push_back(val);
