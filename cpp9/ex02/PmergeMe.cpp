@@ -66,8 +66,7 @@ std::vector<int> PmergeMe::recursiveSort(std::vector<int>& vec, int depth) {
 }
 
 std::vector<int> PmergeMe::mergeInsertSort(const std::vector<int>& input) {
-    std::vector<int> mainChain;
-    std::vector<int> pend;
+    std::vector< std::pair<int,int> > pairs;
 
     std::cout << "Formation des paires :" << std::endl;
     for (size_t i = 0; i + 1 < input.size(); i += 2) {
@@ -76,16 +75,21 @@ std::vector<int> PmergeMe::mergeInsertSort(const std::vector<int>& input) {
         if (a > b) std::swap(a, b);
 
         std::cout << "  Paire (" << a << ", " << b << ")" << std::endl;
-
-        pend.push_back(a);
-        mainChain.push_back(b);
+        pairs.push_back(std::make_pair(a, b));
     }
     if (input.size() % 2 != 0) {
         std::cout << "  Dernier element non paire : " << input.back() << std::endl;
-        pend.push_back(input.back());
+        pairs.push_back(std::make_pair(input.back(), input.back()));
     }
 
-    // Affichage des listes initiales
+    // Construire mainChain (les grands) et pend (les petits)
+    std::vector<int> mainChain;
+    std::vector<int> pend;
+    for (size_t i = 0; i < pairs.size(); ++i) {
+        pend.push_back(pairs[i].first);
+        mainChain.push_back(pairs[i].second);
+    }
+
     std::cout << "\nMainChain avant tri : [ ";
     for (size_t i = 0; i < mainChain.size(); ++i) std::cout << mainChain[i] << " ";
     std::cout << "]" << std::endl;
@@ -98,15 +102,33 @@ std::vector<int> PmergeMe::mergeInsertSort(const std::vector<int>& input) {
     std::cout << "\n--- Tri récursif de MainChain ---" << std::endl;
     mainChain = recursiveSort(mainChain, 0);
 
+    // Étape Ford-Johnson : insérer au début le "pendant" du plus petit grand
+    int firstMain = mainChain.front();
+    int pairedSmall = -1;
+    for (size_t i = 0; i < pairs.size(); ++i) {
+        if (pairs[i].second == firstMain) {
+            pairedSmall = pairs[i].first;
+            break;
+        }
+    }
+    if (pairedSmall != -1) {
+        std::cout << "\nInsertion speciale : " << pairedSmall
+                  << " (pendant de " << firstMain
+                  << ") au debut de la MainChain." << std::endl;
+        mainChain.insert(mainChain.begin(), pairedSmall);
+    }
+
     // Résultat final intermédiaire
-    std::cout << "\n=== Résultat après tri des grands ===" << std::endl;
-    std::cout << "MainChain triee : [ ";
+    std::cout << "\n=== Résultat après insertion initiale ===" << std::endl;
+    std::cout << "MainChain : [ ";
     for (size_t i = 0; i < mainChain.size(); ++i) std::cout << mainChain[i] << " ";
     std::cout << "]" << std::endl;
 
-    std::cout << "Pend : [ ";
-    for (size_t i = 0; i < pend.size(); ++i) std::cout << pend[i] << " ";
+    std::cout << "Pend restant : [ ";
+    for (size_t i = 0; i < pend.size(); ++i) {
+        if (pend[i] != pairedSmall) std::cout << pend[i] << " ";
+    }
     std::cout << "]" << std::endl;
 
-    return mainChain; // pour l'instant on ne fusionne pas avec pend
+    return mainChain;
 }
