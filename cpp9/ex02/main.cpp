@@ -4,7 +4,14 @@
 #include <ctime>
 #include <climits>
 #include <iomanip>
+#include <sys/time.h>
 #include "PmergeMe.hpp"
+
+long long getCurrentTimeMicros() {
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec * 1000000LL + tv.tv_usec;
+}
 
 int main(int argc, char **argv) {
     if (argc < 2) {
@@ -30,18 +37,16 @@ int main(int argc, char **argv) {
     size_t i = 0;
     while (i < numbers.size() && i < MAX_DISPLAY)
         std::cout << numbers[i++] << " ";
-    if (numbers.size() == MAX_DISPLAY)
-        std::cout << numbers[i] << " ";
-    else if (numbers.size() > MAX_DISPLAY)
+    if (numbers.size() > MAX_DISPLAY)
         std::cout << "[...]";
 
     // Mesure du temps d'exécution du tri merge-insert
     std::cout << std::endl;
-    clock_t start = clock();
+    long long start = getCurrentTimeMicros();
     PmergeMe sorter;
-    std::vector<int> sorted = sorter.mergeInsertSort(numbers);
-    clock_t end = clock();
-    double elapsed = double(end - start) / CLOCKS_PER_SEC;
+    std::vector<int> sorted = sorter.mergeInsertSortVector(numbers);
+    long long end = getCurrentTimeMicros();
+    long long elapsed = end - start;
 
 
     // Affichage après tri
@@ -49,15 +54,14 @@ int main(int argc, char **argv) {
     i = 0;
     while (i < sorted.size() && i < MAX_DISPLAY)
         std::cout << sorted[i++] << " ";
-    if (sorted.size() == MAX_DISPLAY)
-        std::cout << sorted[i] << " ";
-    else if (sorted.size() > MAX_DISPLAY)
+    if (sorted.size() > MAX_DISPLAY)
         std::cout << "[...]";
     std::cout << std::endl;
 
+
     // Affichage des résultats de performance
     std::cout << std::fixed << std::setprecision(6);
-    std::cout << "Time to process a range of " << numbers.size() << " elements: " << elapsed << " seconds" << std::endl;
-
+    std::cout << "Time to process a range of " << numbers.size() 
+              << " elements with std::vector: " << elapsed << " us" << std::endl;
     return 0;
 }

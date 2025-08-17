@@ -21,7 +21,7 @@ void PmergeMe::printVector(const std::vector<int> &vec) {
     std::cout << std::endl;
 }
 
-std::vector<int> PmergeMe::merge(const std::vector<int>& left, const std::vector<int>& right) {
+std::vector<int> PmergeMe::mergeVector(const std::vector<int>& left, const std::vector<int>& right) {
     std::vector<int> result;
     size_t i = 0, j = 0;
 
@@ -37,7 +37,7 @@ std::vector<int> PmergeMe::merge(const std::vector<int>& left, const std::vector
     return result;
 }
 
-std::vector<int> PmergeMe::recursiveSort(std::vector<int>& vec, int depth) {
+std::vector<int> PmergeMe::recursiveSortVector(std::vector<int>& vec, int depth) {
     if (vec.size() <= 1)
         return vec;
 
@@ -45,90 +45,156 @@ std::vector<int> PmergeMe::recursiveSort(std::vector<int>& vec, int depth) {
     std::vector<int> left(vec.begin(), vec.begin() + mid);
     std::vector<int> right(vec.begin() + mid, vec.end());
 
-    std::cout << std::string(depth * 2, ' ')
-              << "Divise en : [ ";
-    for (size_t i = 0; i < left.size(); ++i) std::cout << left[i] << " ";
-    std::cout << "] et [ ";
-    for (size_t i = 0; i < right.size(); ++i) std::cout << right[i] << " ";
-    std::cout << "]" << std::endl;
+    // std::cout << std::string(depth * 2, ' ')
+    //           << "Divise en : [ ";
+    // for (size_t i = 0; i < left.size(); ++i) std::cout << left[i] << " ";
+    // std::cout << "] et [ ";
+    // for (size_t i = 0; i < right.size(); ++i) std::cout << right[i] << " ";
+    // std::cout << "]" << std::endl;
 
-    left = recursiveSort(left, depth + 1);
-    right = recursiveSort(right, depth + 1);
+    left = recursiveSortVector(left, depth + 1);
+    right = recursiveSortVector(right, depth + 1);
 
-    std::vector<int> merged = merge(left, right);
+    std::vector<int> merged = mergeVector(left, right);
 
-    std::cout << std::string(depth * 2, ' ')
-              << "Fusion donne : [ ";
-    for (size_t i = 0; i < merged.size(); ++i) std::cout << merged[i] << " ";
-    std::cout << "]" << std::endl;
+    // std::cout << std::string(depth * 2, ' ')
+    //           << "Fusion donne : [ ";
+    // for (size_t i = 0; i < merged.size(); ++i) std::cout << merged[i] << " ";
+    // std::cout << "]" << std::endl;
 
     return merged;
 }
 
-std::vector<int> PmergeMe::mergeInsertSort(const std::vector<int>& input) {
-    std::vector< std::pair<int,int> > pairs;
+// Binary search to find insertion position
+int PmergeMe::binarySearchVector(const std::vector<int>& vec, int target, int limit) {
+    int left = 0;
+    int right = std::min(limit, (int)vec.size() - 1);
+    
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (vec[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return left;
+}
 
-    std::cout << "Formation des paires :" << std::endl;
+// Generate Jacobsthal numbers for optimal insertion order
+std::vector<int> PmergeMe::generateJacobsthalSequenceVector(int n) {
+    std::vector<int> jacobsthal;
+    if (n <= 0) return jacobsthal;
+    
+    jacobsthal.push_back(1);
+    if (n == 1) return jacobsthal;
+    
+    jacobsthal.push_back(3);
+    
+    while (true) {
+        int next = jacobsthal.back() + 2 * jacobsthal[jacobsthal.size() - 2];
+        if (next > n) break;
+        jacobsthal.push_back(next);
+    }
+    
+    return jacobsthal;
+}
+
+std::vector<int> PmergeMe::mergeInsertSortVector(const std::vector<int>& input) {
+    if (input.size() <= 1) return input;
+    
+    std::vector< std::pair<int,int> > pairs;
+    int straggler = -1;
+    bool hasStraggler = false;
+
+    // std::cout << "Formation des paires :" << std::endl;
+    
+    // Form pairs and handle odd element
     for (size_t i = 0; i + 1 < input.size(); i += 2) {
         int a = input[i];
         int b = input[i + 1];
         if (a > b) std::swap(a, b);
 
-        std::cout << "  Paire (" << a << ", " << b << ")" << std::endl;
+        // std::cout << "  Paire (" << a << ", " << b << ")" << std::endl;
         pairs.push_back(std::make_pair(a, b));
     }
+    
     if (input.size() % 2 != 0) {
-        std::cout << "  Dernier element non paire : " << input.back() << std::endl;
-        pairs.push_back(std::make_pair(input.back(), input.back()));
+        straggler = input.back();
+        hasStraggler = true;
+        // std::cout << "  Dernier element non paire : " << straggler << std::endl;
     }
 
-    // Construire mainChain (les grands) et pend (les petits)
+    // Build mainChain and pend
     std::vector<int> mainChain;
     std::vector<int> pend;
+    
     for (size_t i = 0; i < pairs.size(); ++i) {
         pend.push_back(pairs[i].first);
         mainChain.push_back(pairs[i].second);
     }
 
-    std::cout << "\nMainChain avant tri : [ ";
-    for (size_t i = 0; i < mainChain.size(); ++i) std::cout << mainChain[i] << " ";
-    std::cout << "]" << std::endl;
+    // std::cout << "\nMainChain avant tri : [ ";
+    // for (size_t i = 0; i < mainChain.size(); ++i) std::cout << mainChain[i] << " ";
+    // std::cout << "]" << std::endl;
 
-    std::cout << "Pend (les petits) : [ ";
-    for (size_t i = 0; i < pend.size(); ++i) std::cout << pend[i] << " ";
-    std::cout << "]" << std::endl;
+    // std::cout << "Pend (les petits) : [ ";
+    // for (size_t i = 0; i < pend.size(); ++i) std::cout << pend[i] << " ";
+    // std::cout << "]" << std::endl;
 
-    // Tri récursif de mainChain
-    std::cout << "\n--- Tri récursif de MainChain ---" << std::endl;
-    mainChain = recursiveSort(mainChain, 0);
+    // Recursively sort mainChain
+    // std::cout << "\n--- Tri récursif de MainChain ---" << std::endl;
+    mainChain = recursiveSortVector(mainChain, 0);
 
-    // Étape Ford-Johnson : insérer au début le "pendant" du plus petit grand
-    int firstMain = mainChain.front();
-    int pairedSmall = -1;
-    for (size_t i = 0; i < pairs.size(); ++i) {
-        if (pairs[i].second == firstMain) {
-            pairedSmall = pairs[i].first;
-            break;
+    // Insert first pending element at the beginning
+    if (!pend.empty()) {
+        // std::cout << "\nInsertion du premier pendant : " << pend[0] << std::endl;
+        mainChain.insert(mainChain.begin(), pend[0]);
+    }
+
+    // Insert remaining pending elements using Jacobsthal sequence
+    if (pend.size() > 1) {
+        std::vector<int> jacobsthal = generateJacobsthalSequenceVector(pend.size() - 1);
+        std::vector<bool> inserted(pend.size(), false);
+        inserted[0] = true; // First element already inserted
+        
+        // std::cout << "\nUtilisation de la séquence de Jacobsthal pour l'insertion :" << std::endl;
+        
+        for (size_t i = 0; i < jacobsthal.size(); ++i) {
+            int jacIndex = jacobsthal[i];
+            
+            // Insert elements from current Jacobsthal number down to previous + 1
+            int start = (i == 0) ? jacIndex : jacobsthal[i-1] + 1;
+            
+            for (int j = jacIndex; j >= start && j > 0; --j) {
+                if (j < (int)pend.size() && !inserted[j]) {
+                    int pos = binarySearchVector(mainChain, pend[j], j + i);
+                    // std::cout << "  Insertion de " << pend[j] << " à la position " << pos << std::endl;
+                    mainChain.insert(mainChain.begin() + pos, pend[j]);
+                    inserted[j] = true;
+                }
+            }
+        }
+        
+        // Insert any remaining elements
+        for (size_t i = 1; i < pend.size(); ++i) {
+            if (!inserted[i]) {
+                int pos = binarySearchVector(mainChain, pend[i], mainChain.size());
+                // std::cout << "  Insertion finale de " << pend[i] << " à la position " << pos << std::endl;
+                mainChain.insert(mainChain.begin() + pos, pend[i]);
+            }
         }
     }
-    if (pairedSmall != -1) {
-        std::cout << "\nInsertion speciale : " << pairedSmall
-                  << " (pendant de " << firstMain
-                  << ") au debut de la MainChain." << std::endl;
-        mainChain.insert(mainChain.begin(), pairedSmall);
+
+    // Insert straggler if exists
+    if (hasStraggler) {
+        int pos = binarySearchVector(mainChain, straggler, mainChain.size());
+        // std::cout << "\nInsertion de l'élément isolé " << straggler << " à la position " << pos << std::endl;
+        mainChain.insert(mainChain.begin() + pos, straggler);
     }
 
-    // Résultat final intermédiaire
-    std::cout << "\n=== Résultat après insertion initiale ===" << std::endl;
-    std::cout << "MainChain : [ ";
-    for (size_t i = 0; i < mainChain.size(); ++i) std::cout << mainChain[i] << " ";
-    std::cout << "]" << std::endl;
-
-    std::cout << "Pend restant : [ ";
-    for (size_t i = 0; i < pend.size(); ++i) {
-        if (pend[i] != pairedSmall) std::cout << pend[i] << " ";
-    }
-    std::cout << "]" << std::endl;
+    // std::cout << "\n=== Résultat final ===" << std::endl;
+    // printVector(mainChain);
 
     return mainChain;
 }
