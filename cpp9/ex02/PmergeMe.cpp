@@ -45,22 +45,6 @@ std::vector<int> PmergeMe::mergeVector(const std::vector<int>& left, const std::
     return result;
 }
 
-std::deque<int> PmergeMe::mergeDeque(const std::deque<int>& left, const std::deque<int>& right) {
-    std::deque<int> result;
-    size_t i = 0, j = 0;
-
-    while (i < left.size() && j < right.size()) {
-        if (left[i] < right[j])
-            result.push_back(left[i++]);
-        else
-            result.push_back(right[j++]);
-    }
-    while (i < left.size()) result.push_back(left[i++]);
-    while (j < right.size()) result.push_back(right[j++]);
-
-    return result;
-}
-
 std::vector<int> PmergeMe::recursiveSortVector(std::vector<int>& vec, int depth) {
     if (vec.size() <= 1)
         return vec;
@@ -89,23 +73,6 @@ std::vector<int> PmergeMe::recursiveSortVector(std::vector<int>& vec, int depth)
     return merged;
 }
 
-
-std::deque<int> PmergeMe::recursiveSortDeque(std::deque<int>& vec, int depth) {
-    if (vec.size() <= 1)
-        return vec;
-
-    size_t mid = vec.size() / 2;
-    std::deque<int> left(vec.begin(), vec.begin() + mid);
-    std::deque<int> right(vec.begin() + mid, vec.end());
-
-    left = recursiveSortDeque(left, depth + 1);
-    right = recursiveSortDeque(right, depth + 1);
-
-    std::deque<int> merged = mergeDeque(left, right);
-
-    return merged;
-}
-
 // Binary search to find insertion position
 int PmergeMe::binarySearchVector(const std::vector<int>& vec, int target, int limit) {
     int left = 0;
@@ -122,42 +89,8 @@ int PmergeMe::binarySearchVector(const std::vector<int>& vec, int target, int li
     return left;
 }
 
-int PmergeMe::binarySearchDeque(const std::deque<int>& deq, int target, int limit) {
-    int left = 0;
-    int right = std::min(limit, (int)deq.size() - 1);
-
-    while (left <= right) {
-        int mid = left + (right - left) / 2;
-        if (deq[mid] < target) {
-            left = mid + 1;
-        } else {
-            right = mid - 1;
-        }
-    }
-    return left;
-}
-
-// Generate Jacobsthal numbers for optimal insertion order
 std::vector<int> PmergeMe::generateJacobsthalSequenceVector(int n) {
     std::vector<int> jacobsthal;
-    if (n <= 0) return jacobsthal;
-    
-    jacobsthal.push_back(1);
-    if (n == 1) return jacobsthal;
-    
-    jacobsthal.push_back(3);
-    
-    while (true) {
-        int next = jacobsthal.back() + 2 * jacobsthal[jacobsthal.size() - 2];
-        if (next > n) break;
-        jacobsthal.push_back(next);
-    }
-    
-    return jacobsthal;
-}
-
-std::deque<int> PmergeMe::generateJacobsthalSequenceDeque(int n) {
-    std::deque<int> jacobsthal;
     if (n <= 0) return jacobsthal;
     
     jacobsthal.push_back(1);
@@ -182,8 +115,6 @@ std::vector<int> PmergeMe::mergeInsertSortVector(const std::vector<int>& input) 
     bool hasStraggler = false;
 
     // std::cout << "Formation des paires :" << std::endl;
-    
-    // Form pairs and handle odd element
     for (size_t i = 0; i + 1 < input.size(); i += 2) {
         int a = input[i];
         int b = input[i + 1];
@@ -198,8 +129,6 @@ std::vector<int> PmergeMe::mergeInsertSortVector(const std::vector<int>& input) 
         hasStraggler = true;
         // std::cout << "  Dernier element non paire : " << straggler << std::endl;
     }
-
-    // Build mainChain and pend
     std::vector<int> mainChain;
     std::vector<int> pend;
     
@@ -273,6 +202,71 @@ std::vector<int> PmergeMe::mergeInsertSortVector(const std::vector<int>& input) 
     return mainChain;
 }
 
+// DEQUE IMPLEMENTATION
+
+std::deque<int> PmergeMe::mergeDeque(const std::deque<int>& left, const std::deque<int>& right) {
+    std::deque<int> result;
+    size_t i = 0, j = 0;
+
+    while (i < left.size() && j < right.size()) {
+        if (left[i] < right[j])
+            result.push_back(left[i++]);
+        else
+            result.push_back(right[j++]);
+    }
+    while (i < left.size()) result.push_back(left[i++]);
+    while (j < right.size()) result.push_back(right[j++]);
+
+    return result;
+}
+
+std::deque<int> PmergeMe::recursiveSortDeque(std::deque<int>& vec, int depth) {
+    if (vec.size() <= 1)
+        return vec;
+
+    size_t mid = vec.size() / 2;
+    std::deque<int> left(vec.begin(), vec.begin() + mid);
+    std::deque<int> right(vec.begin() + mid, vec.end());
+
+    left = recursiveSortDeque(left, depth + 1);
+    right = recursiveSortDeque(right, depth + 1);
+
+    std::deque<int> merged = mergeDeque(left, right);
+
+    return merged;
+}
+
+int PmergeMe::binarySearchDeque(const std::deque<int>& deq, int target, int limit) {
+    int left = 0;
+    int right = std::min(limit, (int)deq.size() - 1);
+
+    while (left <= right) {
+        int mid = left + (right - left) / 2;
+        if (deq[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    return left;
+}
+
+std::deque<int> PmergeMe::generateJacobsthalSequenceDeque(int n) {
+    std::deque<int> jacobsthal;
+    if (n <= 0) return jacobsthal;
+    
+    jacobsthal.push_back(1);
+    if (n == 1) return jacobsthal;
+    
+    jacobsthal.push_back(3);
+    
+    while (true) {
+        int next = jacobsthal.back() + 2 * jacobsthal[jacobsthal.size() - 2];
+        if (next > n) break;
+        jacobsthal.push_back(next);
+    }
+    return jacobsthal;
+}
 
 std::deque<int> PmergeMe::mergeInsertSortDeque(const std::deque<int>& input) {
     if (input.size() <= 1) return input;
