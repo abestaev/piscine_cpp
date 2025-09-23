@@ -21,17 +21,22 @@ static int string_to_int(const std::string &s){
     return i;
 }
 
+static bool isLeapYear(int year) {
+    return (year % 4 == 0) && ((year % 100 != 0) || (year % 400 == 0));
+}
+
 static bool isValidDateFormat(std::string &date) {
     if (date.size() != 10 || date[4] != '-' || date[7] != '-')
         return false;
     for (int i = 0; i < 10; i++) {
-        if ((i != 4 && i != 7) && !std::isdigit(date[i]))
+        if ((i != 4 && i != 7) && !std::isdigit(static_cast<unsigned char>(date[i])))
             return false;
     }
     int year = string_to_int(date.substr(0, 4));
     int month = string_to_int(date.substr(5, 2));
     int day = string_to_int(date.substr(8, 2));
-    int dayInMonth[] = {0, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    int febDays = isLeapYear(year) ? 29 : 28;
+    int dayInMonth[] = {0, 31, febDays, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 
     if (year < 2009 || year > 2025)
         return false;
